@@ -5,7 +5,7 @@ numberRouter.get("/",async(req,res)=>{
     let arr=[]
     let url=req.query.url
     const promise1 = new Promise((resolve, reject) => {
-        setTimeout(resolve, 500, []);
+        setTimeout(resolve, 5000, {data:{numbers:[]}});
       });
     
     if(typeof url==="object"){
@@ -19,19 +19,22 @@ numberRouter.get("/",async(req,res)=>{
         }
    
         
-        for(let j=0;j<url.length;j++){
+        for(let j=0;j<url.length;j++){  
             if(isValidUrl(url[j])){
                 let promise2=axios.get(url[j]);
                 await Promise.race([promise1,promise2]).then((res)=>{arr=[...arr,...res.data.numbers]})
             }
         }
-        res.send(arr)
+        let sortAndUnique=[...new Set(arr)].sort((a,b)=>a-b)
+        console.log(sortAndUnique,arr)
+        res.send(sortAndUnique)
         return
     }
-    promise2=axios.get(url)
-    await Promise.race([promise1,promise2]).then((res)=>{console.log(res?.data?.numbers)})
-
-    res.send(arr)
+    let promise2=axios.get(url)
+    await Promise.race([promise1,promise2]).then((res)=>{arr=[...res?.data?.numbers]})
+    let sortAndUnique=[...new Set(arr)].sort((a,b)=>a-b)
+    console.log(sortAndUnique,arr)
+    res.send(sortAndUnique)
 
 })
 
