@@ -5,7 +5,7 @@ numberRouter.get("/",async(req,res)=>{
     let arr=[]
     let url=req.query.url
     const promise1 = new Promise((resolve, reject) => {
-        setTimeout(resolve, 5000, {data:{numbers:[]}});
+        setTimeout(resolve, 500, {data:{numbers:[]}});
       });
     
     if(typeof url==="object"){
