@@ -1,0 +1,40 @@
+const express=require("express");
+const axios=require("axios")
+const numberRouter=express.Router();
+numberRouter.get("/",async(req,res)=>{
+    let arr=[]
+    let url=req.query.url
+    const promise1 = new Promise((resolve, reject) => {
+        setTimeout(resolve, 500, []);
+      });
+    
+    if(typeof url==="object"){
+        const isValidUrl = urlString=> {
+            try { 
+                return Boolean(new URL(urlString)); 
+            }
+            catch(e){ 
+                return false; 
+            }
+        }
+   
+        
+        for(let j=0;j<url.length;j++){
+            if(isValidUrl(url[j])){
+                let promise2=axios.get(url[j]);
+                await Promise.race([promise1,promise2]).then((res)=>{arr=[...arr,...res.data.numbers]})
+            }
+        }
+        res.send(arr)
+        return
+    }
+    promise2=axios.get(url)
+    await Promise.race([promise1,promise2]).then((res)=>{console.log(res?.data?.numbers)})
+
+    res.send(arr)
+
+})
+
+module.exports={
+    numberRouter
+}
